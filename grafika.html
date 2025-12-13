@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CXX – Grafika</title>
+
+<style>
+/* -------------------- GLOBAL -------------------- */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Inter','Segoe UI',sans-serif;
+}
+
+body{
+  background:#0f0f11;
+  color:#f5f5f5;
+  min-height:100vh;
+  padding:1.2rem;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* -------------------- ANIMOVANÉ POZADIE -------------------- */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:linear-gradient(135deg,#ff6f61,#ff9f43,#f368e0,#48dbfb);
+  background-size:400% 400%;
+  animation:gradient 12s ease infinite;
+  opacity:0.15;
+  z-index:-2;
+}
+
+@keyframes gradient{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+/* -------------------- IKONY V POZADÍ -------------------- */
+.bg span{
+  position:absolute;
+  font-size:3.2rem;
+  color:rgba(255,255,255,0.08);
+  z-index:-1;
+  user-select:none;
+}
+
+.bg span:nth-child(1){ top:12%; left:10%; }
+.bg span:nth-child(2){ top:35%; right:12%; }
+.bg span:nth-child(3){ top:55%; left:20%; }
+.bg span:nth-child(4){ top:75%; right:30%; }
+.bg span:nth-child(5){ top:82%; left:65%; }
+
+/* -------------------- NOVÁ GRAFICKÁ HLAVIČKA -------------------- */
+.gfx-header{
+  text-align:center;
+  margin-bottom:2rem;
+  padding:2rem 1.4rem;
+  background:rgba(255,255,255,0.06);
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,0.18);
+  backdrop-filter:blur(12px);
+  box-shadow:0 0 28px rgba(255,111,97,0.25);
+  position:relative;
+  overflow:hidden;
+}
+
+/* jemné symboly v pozadí */
+.gfx-header::before{
+  content:"🎨  🖌️  🖼️  ✏️";
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  font-size:4rem;
+  letter-spacing:18px;
+  color:rgba(255,255,255,0.05);
+  pointer-events:none;
+}
+
+/* badge */
+.gfx-badge{
+  display:inline-block;
+  padding:6px 16px;
+  margin-bottom:14px;
+  font-size:0.75rem;
+  letter-spacing:1px;
+  color:#0f0f11;
+  background:linear-gradient(135deg,#ff6f61,#ff9f43,#f368e0,#48dbfb);
+  background-size:200% 200%;
+  animation:badgeMove 6s ease infinite;
+  border-radius:20px;
+  font-weight:700;
+  text-transform:uppercase;
+}
+
+@keyframes badgeMove{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+.gfx-header h1{
+  font-size:2.8rem;
+  font-weight:800;
+  color:#ff6f61;
+  text-shadow:0 0 14px rgba(255,111,97,0.7);
+}
+
+.gfx-header p{
+  margin-top:.4rem;
+  color:#ffb199;
+  font-size:1.1rem;
+}
+
+/* animovaná čiara */
+.gfx-underline{
+  width:180px;
+  height:3px;
+  margin:16px auto 0;
+  background:linear-gradient(90deg, transparent, #ff6f61, transparent);
+  animation:glowline 2.4s ease-in-out infinite;
+  border-radius:4px;
+}
+
+@keyframes glowline{
+  0%{ opacity:0.3; transform:scaleX(0.7); }
+  50%{ opacity:1; transform:scaleX(1); }
+  100%{ opacity:0.3; transform:scaleX(0.7); }
+}
+
+/* -------------------- QUESTIONS -------------------- */
+.questions h2{
+  text-align:center;
+  margin-bottom:1.2rem;
+  font-size:1.4rem;
+  color:#ffb199;
+  font-weight:700;
+}
+
+/* --- GLASSMORPHISM KARTY --- */
+.question{
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(10px);
+  border-radius:16px;
+  padding:1.2rem;
+  margin-bottom:1.2rem;
+  border:1px solid rgba(255,255,255,0.15);
+  box-shadow:0 8px 25px rgba(0,0,0,0.25);
+  transition:.25s;
+}
+
+.question:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 30px rgba(255,111,97,0.25);
+}
+
+.q-header{
+  display:flex;
+  align-items:flex-start;
+  gap:.8rem;
+}
+
+.q-num{
+  background:#ff6f61;
+  color:#0f0f11;
+  font-weight:700;
+  border-radius:10px;
+  padding:.4rem .75rem;
+  font-size:1rem;
+  box-shadow:0 0 10px rgba(255,111,97,0.6);
+}
+
+.q-text{
+  font-size:1.05rem;
+  color:#ffffff;
+  line-height:1.45rem;
+}
+
+.hint{
+  margin-top:.6rem;
+  font-size:.9rem;
+  color:#ffb199;
+  opacity:0.85;
+}
+
+/* -------------------- CHECKPOINT -------------------- */
+.checkpoint{
+  margin-top:2rem;
+  padding:1.5rem;
+  border-radius:18px;
+  background:rgba(255,255,255,0.1);
+  border:2px dashed #ff6f61;
+  text-align:center;
+  backdrop-filter:blur(6px);
+  box-shadow:0 6px 20px rgba(0,0,0,0.25);
+}
+
+.checkpoint strong{
+  color:#ff6f61;
+  font-size:1.2rem;
+}
+
+/* -------------------- FOOTER -------------------- */
+footer{
+  margin-top:2rem;
+  text-align:center;
+  font-size:.8rem;
+  color:#bbb;
+}
+
+.insta-link {
+  display:inline-block;
+  font-size:1.1rem;
+  font-weight:700;
+  color:#ff6f61;
+  text-decoration:none;
+  text-shadow:0 0 10px rgba(255,111,97,0.6);
+  transition:0.3s;
+}
+
+.insta-link:hover {
+  color:#ffb199;
+  text-shadow:0 0 14px rgba(255,111,97,0.9);
+  transform:translateY(-2px);
+}
+
+.gfx-footer {
+  margin-top:2rem;
+  text-align:center;
+  font-size:.85rem;
+  color:#ffb199;
+  text-shadow:0 0 8px rgba(255,111,97,0.4);
+}
+
+.gfx-footer .ornament {
+  font-size:20px;
+  color:#ff6f61;
+  margin-bottom:6px;
+  text-shadow:0 0 10px rgba(255,111,97,0.6);
+}
+/* -------------------- MOBILE -------------------- */
+@media(max-width:480px){
+  .gfx-header h1{ font-size:2.2rem; }
+  .q-text{ font-size:1rem; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg">
+  <span>🎨</span>
+  <span>🖌️</span>
+  <span>🖼️</span>
+  <span>🖍️</span>
+  <span>📐</span>
+</div>
+
+<!-- ✅ NOVÁ HLAVIČKA -->
+<header class="gfx-header">
+  <div class="gfx-badge">SSOSTA ESCAPE GAME • LEVEL 3</div>
+  <h1>UČEBŇA 5</h1>
+  <div class="gfx-underline"></div>
+</header>
+
+<main>
+
+<section class="questions">
+  <h2>🖌️ Úlohy</h2>
+
+  <!-- 1 -->
+  <div class="question">
+    <div class="q-header">
+      <div class="q-num">1</div>
+      <div class="q-text">
+        Ktorý formát dokáže uložiť priehľadné pozadie?  
+        <br><br><strong>Pošli jediné slovo.</strong>
+        <div class="hint">Hint: používa sa v grafike, logách a UI.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="question">
+    <div class="q-header">
+      <div class="q-num">2</div>
+      <div class="q-text">
+        „Pohybujem sa po plátne, akoby som tam žil.  
+        Beriem tvary a otváram cesty dizajnu.  
+        <br><br><strong>Kto som?</strong>“
+        <div class="hint">Hint: nástroj v grafických editoroch.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="question">
+    <div class="q-header">
+      <div class="q-num">3</div>
+      <div class="q-text">
+        „Keď ma je málo, všetko sa rozsype.  
+        Keď ma je veľa, všetko je ostré.  
+        Som základ každého obrazu.  
+        <br><br><strong>Ako sa volám?</strong>“
+        <div class="hint">Hint: najmenší prvok digitálneho obrazu.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="question">
+    <div class="q-header">
+      <div class="q-num">4</div>
+      <div class="q-text">
+        „Vždy som medzi dvoma bodmi.  
+        Spájam ich, aj keď sú ďaleko.  
+        Niekedy som mäkký, inokedy tvrdý.  
+        Ja som cesta, cez ktorú prúdi tvar.“  
+        <br><br><strong>Čo som?</strong>
+        <div class="hint">Hint: základ vektorovej grafiky.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="question">
+    <div class="q-header">
+      <div class="q-num">5</div>
+      <div class="q-text">
+        Koľko dizajnov mandál sa nachádza v učebni?  
+        <br><br><strong>Odpoveď je číslo.</strong>
+        <div class="hint">Hint: pozri stenu s dekoráciami.</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<section class="checkpoint">
+  <p>📩 Odpovede pošli do DM na</p>
+  <a href="https://www.instagram.com/ssosta.escape.game/" target="_blank" class="insta-link">
+    @escape.game.ssosta
+  </a>
+</section>
+
+<footer class="gfx-footer">
+  <div class="ornament">✦ ✧ ✦</div>
+  <p>SSOSTA ESCAPE GAME</p>
+</footer>
+
+</body>
+</html>
